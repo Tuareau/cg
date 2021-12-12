@@ -15,14 +15,14 @@ Painter::Painter() {
 	}
 
 	std::vector<Point> grd_pts = {
-		{0, this->SCR_HGH, 0, 1},
-		{this->SCR_WDH, this->SCR_HGH, 0, 1},
-		{this->SCR_WDH, this->SCR_HGH * 3 / 4, 500, 1},
-		{0, this->SCR_HGH * 3 / 4, 500, 1},
+		{            0, this->SCR_HGH,  500, 1},
+		{this->SCR_WDH, this->SCR_HGH,  500, 1},
+		{this->SCR_WDH, this->SCR_HGH, -500, 1},
+		{            0, this->SCR_HGH, -500, 1},
 	};
 	this->ground = Matrix(grd_pts);
 
-	this->light = Point(0, -500, 0);
+	this->light = Point(320, -1000, 0);
 }
 
 void Painter::clear_buffer() {
@@ -58,10 +58,10 @@ void Painter::draw_shadow(const Matrix & fig, Figure type) {
 	}
 
 	if (type == Figure::PAR) {
-		this->draw_parallelepiped_shadow(shadow);
+		this->draw_parallelepiped_shadow(shadow.make_projection(Axes::Y, Y_TR).make_projection(Axes::X, X_TR));
 	}
 	else {
-		this->draw_pyramid_shadow(shadow);
+		this->draw_pyramid_shadow(shadow.make_projection(Axes::Y, Y_TR).make_projection(Axes::X, X_TR));
 	}
 }
 
@@ -120,25 +120,26 @@ Point Painter::normalize_point(const Point & p) {
 }
 
 void Painter::draw_parallelepiped(const Matrix & fig) {
+	auto projection = fig.make_projection(Axes::Y, Y_TR).make_projection(Axes::X, X_TR);
 
 	std::vector<PPolygon> polygons;
-	polygons.emplace_back(fig[0], fig[3], fig[2]);
-	polygons.emplace_back(fig[0], fig[1], fig[2]);
+	polygons.emplace_back(projection[0], projection[3], projection[2]);
+	polygons.emplace_back(projection[0], projection[1], projection[2]);
 
-	polygons.emplace_back(fig[1], fig[2], fig[6]);
-	polygons.emplace_back(fig[1], fig[5], fig[6]);
+	polygons.emplace_back(projection[1], projection[2], projection[6]);
+	polygons.emplace_back(projection[1], projection[5], projection[6]);
 
-	polygons.emplace_back(fig[3], fig[2], fig[6]);
-	polygons.emplace_back(fig[3], fig[7], fig[6]);
+	polygons.emplace_back(projection[3], projection[2], projection[6]);
+	polygons.emplace_back(projection[3], projection[7], projection[6]);
 
-	polygons.emplace_back(fig[5], fig[6], fig[7]);
-	polygons.emplace_back(fig[5], fig[4], fig[7]);
+	polygons.emplace_back(projection[5], projection[6], projection[7]);
+	polygons.emplace_back(projection[5], projection[4], projection[7]);
 
-	polygons.emplace_back(fig[0], fig[3], fig[7]);
-	polygons.emplace_back(fig[0], fig[4], fig[7]);
+	polygons.emplace_back(projection[0], projection[3], projection[7]);
+	polygons.emplace_back(projection[0], projection[4], projection[7]);
 
-	polygons.emplace_back(fig[0], fig[1], fig[5]);
-	polygons.emplace_back(fig[0], fig[4], fig[5]);
+	polygons.emplace_back(projection[0], projection[1], projection[5]);
+	polygons.emplace_back(projection[0], projection[4], projection[5]);
 
 	int color = BLUE;
 	for (size_t i = 0; i < polygons.size(); ++i) {
@@ -171,11 +172,12 @@ void Painter::draw_parallelepiped_shadow(const Matrix & fig) {
 }
 
 void Painter::draw_pyramid(const Matrix & fig) {
+	auto projection = fig.make_projection(Axes::Y, Y_TR).make_projection(Axes::X, X_TR);
 	std::vector<PPolygon> polygons;
-	polygons.emplace_back(fig[0], fig[1], fig[2]);
-	polygons.emplace_back(fig[0], fig[2], fig[3]);
-	polygons.emplace_back(fig[0], fig[1], fig[3]);
-	polygons.emplace_back(fig[1], fig[2], fig[3]);
+	polygons.emplace_back(projection[0], projection[1], projection[2]);
+	polygons.emplace_back(projection[0], projection[2], projection[3]);
+	polygons.emplace_back(projection[0], projection[1], projection[3]);
+	polygons.emplace_back(projection[1], projection[2], projection[3]);
 	int color = LIGHTCYAN;
 	for (size_t i = 0; i < polygons.size(); ++i) {
 		this->paint_polygon(polygons[i], color++);

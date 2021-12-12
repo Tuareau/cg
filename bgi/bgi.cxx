@@ -7,33 +7,32 @@
 #include "painter.h"
 #include "matrix.h"
 #include "point.h"
-#include "geometry.h"
 
 #define ESCAPE 27
 
-const int DELTA = 20;
+const int DELTA = 25;
 const double SCALE = 0.3;
-const double ALPHA = 7;
+const double ALPHA = 15;
 
 void show_instruction();
 
 int main() {
 
 	std::vector<Point> par_points = {
-		{30, 70, 140, 1},
-		{70, 70, 140, 1},
-		{70, 70, 80, 1},
-		{30, 70, 80, 1},
-		{30, 30, 140, 1},
-		{70, 30, 140, 1},
-		{70, 30, 80, 1},
-		{30, 30, 80, 1},
+		{ 95, 170, 130, 1},
+		{135, 170, 130, 1},
+		{135, 170,  70, 1},
+		{ 95, 170,  70, 1},
+		{ 95, 130, 130, 1},
+		{135, 130, 130, 1},
+		{135, 130,  70, 1},
+		{ 95, 130,  70, 1},
 	};
 	std::vector<Point> pyr_points = {
-		{130, 180, 105, 1},
-		{180, 180, 130, 1},
-		{155, 155, 80, 1},
-		{140, 130, 195, 1},
+		{118, 131,  66, 1},
+		{ 86, 157,  96, 1},
+		{118, 168,  52, 1},
+		{144, 147, 155, 1},
 	};
 	Matrix parallelepiped(par_points);
 	Matrix pyramid(pyr_points);
@@ -210,7 +209,6 @@ int main() {
 			painter.draw_pyramid(pyramid);
 		}
 	}
-
 	closegraph();
 	return 0;
 }

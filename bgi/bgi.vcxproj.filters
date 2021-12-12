@@ -85,9 +85,6 @@
     <ClInclude Include="point.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="geometry.h">
-      <Filter>header</Filter>
-    </ClInclude>
     <ClInclude Include="painter.h">
       <Filter>header</Filter>
     </ClInclude>

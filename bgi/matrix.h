@@ -3,12 +3,18 @@
 #ifndef _MATRIX_H_
 #define _MATRIX_H_
 
+#define Y_TR 45
+#define X_TR 36
+
 #include <vector>
 #include <cmath>
 #include <stdexcept>
 
 #include "point.h"
-#include "geometry.h"
+
+enum class Axes {
+	X, Y, Z,
+};
 
 class Matrix
 {
@@ -29,6 +35,8 @@ public:
 
 	void multiply(const Matrix & other);
 
+	Matrix make_projection(Axes axis, double angle) const;
+
 	Point & operator[](size_t idx);
 	const Point operator[](size_t idx) const;
 
@@ -48,7 +56,7 @@ Matrix * make_coordinates_y_transform(double angle);
 Matrix * make_coordinates_z_transform(double angle);
 
 //Matrix * make_coordinates_x_reverse_transform(double angle);
-Matrix * make_coordinates_y_reverse_transform(double angle);
+//Matrix * make_coordinates_y_reverse_transform(double angle);
 //Matrix * make_coordinates_z_reverse_transform(double angle);
 
 #endif

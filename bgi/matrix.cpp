@@ -156,6 +156,28 @@ void Matrix::rotate(double angle, Axes axis, const Point & base) {
 	delete rotate_transform;
 }
 
+Matrix Matrix::make_projection(Axes axis, double angle) const {
+	Matrix * projection_transform = nullptr;
+	switch (axis) {
+	case Axes::X:
+		projection_transform = make_coordinates_x_transform(angle);
+		break;
+	case Axes::Y:
+		projection_transform = make_coordinates_y_transform(angle);
+		break;
+	case Axes::Z:
+		projection_transform = make_coordinates_z_transform(angle);
+		break;
+	default:
+		throw std::invalid_argument("Matrix::rotate(): invalid Axes argument");
+		break;
+	}
+	Matrix transformed(*this);
+	transformed.multiply(*projection_transform);
+	delete projection_transform;
+	return transformed;
+}
+
 Matrix * make_coordinates_y_transform(double angle) {
 	double rad = 3.14 / 180.0 * angle;
 	auto cos_value = std::cos(rad), sin_value = std::sin(rad);
@@ -164,18 +186,6 @@ Matrix * make_coordinates_y_transform(double angle) {
 		Point(      0.0, 1.0,        0.0, 0.0),
 		Point(sin_value, 0.0,  cos_value, 0.0),
 		Point(      0.0, 0.0,        0.0, 1.0),
-	};
-	return new Matrix(coordinates_points);
-}
-
-Matrix * make_coordinates_y_reverse_transform(double angle) {
-	double rad = 3.14 / 180.0 * angle;
-	auto cos_value = std::cos(rad), sin_value = std::sin(rad);
-	std::vector<Point> coordinates_points {
-		Point( cos_value, 0.0, sin_value, 0.0),
-		Point(       0.0, 1.0,       0.0, 0.0),
-		Point(-sin_value, 0.0, cos_value, 0.0),
-		Point(       0.0, 0.0,       0.0, 1.0),
 	};
 	return new Matrix(coordinates_points);
 }
@@ -196,10 +206,10 @@ Matrix * make_coordinates_z_transform(double angle) {
 	double rad = 3.14 / 180.0 * angle;
 	auto cos_value = std::cos(rad), sin_value = std::sin(rad);
 	std::vector<Point> rotate_points {
-	Point( cos_value, sin_value, 0.0, 0.0),
-	Point(-sin_value, cos_value, 0.0, 0.0),
-	Point(       0.0,       0.0, 1.0, 0.0),
-	Point(       0.0,       0.0, 0.0, 1.0),
+		Point( cos_value, sin_value, 0.0, 0.0),
+		Point(-sin_value, cos_value, 0.0, 0.0),
+		Point(       0.0,       0.0, 1.0, 0.0),
+		Point(       0.0,       0.0, 0.0, 1.0),
 	};
 	return new Matrix(rotate_points);
 }

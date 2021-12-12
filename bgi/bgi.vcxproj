@@ -81,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dibutil.h" />
-    <ClInclude Include="geometry.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="painter.h" />
