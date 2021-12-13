@@ -59,10 +59,3 @@ bool Point::operator==(const Point & other) {
 bool Point::operator!=(const Point & other) {
 	return !(*this == other);
 }
-
-Point Point::operator-(const Point & p) const {
-	auto x = this->x() - p.x();
-	auto y = this->y() - p.y();
-	auto z = this->z() - p.z();
-	return Point(x, y, z);
-}

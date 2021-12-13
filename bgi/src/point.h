@@ -34,8 +34,6 @@ public:
 	bool operator==(const Point & other);
 	bool operator!=(const Point & other);
 
-	Point operator-(const Point & p) const;
-
 };
 
 #endif
